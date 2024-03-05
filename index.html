@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>D3.js Dynamic Graph</title>
     <style>
-      .chart {
+      #chart {
         text-align: center;
-        transform: scale(1.25); /* Set the initial scale */
         transition: transform 0.3s ease; /* Add transition for smooth animation */
       }
     </style>
     <script src="https://d3js.org/d3.v7.min.js"></script>
   </head>
   <body>
-    <div class="chart" id="chart"></div>
+    <div id="chart" id="chart"></div>
     <script>
       var queryParams = new URLSearchParams(window.location.search);
       var ar = queryParams.get("ar") || "2.67";
       var br = queryParams.get("br") || "3.33";
       var lg = queryParams.get("lg") || "4.33";
       var ps = queryParams.get("ps") || "3.67";
-
+      var scale = queryParams.get("scale") || "1.25";
+      var chartElement = document.getElementById("chart");
+      chartElement.style.transform = "scale(" + scale + ")";
       var report = { ar: ar, br: br, lg: lg, ps: ps };
 
       var svgContainer = d3
