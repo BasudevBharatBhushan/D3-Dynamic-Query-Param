@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D3.js Dynamic Graph</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
+    <div class="chart" id="chart"></div>
+    <script>
+      var queryParams = new URLSearchParams(window.location.search);
+      var ar = queryParams.get("ar") || "2.67";
+      var br = queryParams.get("br") || "3.33";
+      var lg = queryParams.get("lg") || "4.33";
+      var ps = queryParams.get("ps") || "3.67";
+
+      var report = { ar: ar, br: br, lg: lg, ps: ps };
+
+      var svgContainer = d3
+        .select("#chart")
+        .append("svg")
+        .attr("width", 500)
+        .attr("height", 500)
+        .attr(
+          "style",
+          "background-color: #f6f6f6;background-repeat: no-repeat;background-position: 50%;"
+        )
+        .attr("id", "stress_shifter_svg");
+
+      var line1 = svgContainer
+        .append("line")
+        .attr("x1", 100)
+        .attr("y1", 250)
+        .attr("x2", 400)
+        .attr("y2", 250)
+        .attr("stroke-width", 4)
+        .attr("stroke", "white");
+
+      var line2 = svgContainer
+        .append("line")
+        .attr("x1", 250)
+        .attr("y1", 400)
+        .attr("x2", 250)
+        .attr("y2", 100)
+        .attr("stroke-width", 4)
+        .attr("stroke", "white");
+
+      var circle2 = svgContainer
+        .append("circle")
+        .attr("cx", 250)
+        .attr("cy", 250)
+        .attr("r", 150)
+        .style("stroke", "white") // set the line colour
+        .style("stroke-width", "3px")
+        .style("fill", "none");
+
+      var circle3 = svgContainer
+        .append("circle")
+        .attr("cx", 250)
+        .attr("cy", 250)
+        .attr("r", 120)
+        .style("stroke", "white") // set the line colour
+        .style("stroke-width", "3px")
+        .style("fill", "none");
+
+      var center_x = 250;
+      var center_y = 250;
+
+      var ar = {
+        x: center_x - parseFloat(report.ar * 30),
+        y: center_y,
+      };
+
+      var lg = {
+        x: center_x,
+        y: center_y - parseFloat(report.lg * 30),
+      };
+
+      var br = {
+        x: center_x + parseFloat(report.br * 30),
+        y: center_y,
+      };
+
+      var ps = {
+        x: center_x,
+        y: center_y + parseFloat(report.ps * 30),
+      };
+
+      var pathinfo = [
+        { x: ar.x, y: ar.y },
+        { x: lg.x, y: lg.y },
+        { x: br.x, y: br.y },
+        { x: ps.x, y: ps.y },
+        { x: ar.x, y: ar.y },
+      ];
+
+      // Specify the function for generating path data
+      var d3line2 = d3
+        .line()
+        .x(function (d) {
+          return d.x;
+        })
+        .y(function (d) {
+          return d.y;
+        });
+      //.interpolate("linear");
+      // "linear" for piecewise linear segments
+      // Creating path using data in pathinfo and path data generator
+      // d3line.
+      svgContainer
+        .append("path")
+        .attr("d", d3line2(pathinfo))
+        .style("stroke-width", 2)
+        .style("stroke", "none")
+        .style("fill", "#00cfda");
+
+      var first_qudrant = {
+        score: parseFloat(report.ar) + parseFloat(report.lg),
+        path: [
+          { x: ar.x, y: ar.y },
+          { x: lg.x, y: lg.y },
+          { x: center_x, y: center_y },
+          { x: ar.x, y: ar.y },
+        ],
+      };
+
+      var second_qudrant = {
+        score: parseFloat(report.lg) + parseFloat(report.br),
+        path: [
+          { x: lg.x, y: lg.y },
+          { x: br.x, y: br.y },
+          { x: center_x, y: center_y },
+          { x: lg.x, y: lg.y },
+        ],
+      };
+
+      var third_qudrant = {
+        score: parseFloat(report.br) + parseFloat(report.ps),
+        path: [
+          { x: br.x, y: br.y },
+          { x: ps.x, y: ps.y },
+          { x: center_x, y: center_y },
+          { x: br.x, y: br.y },
+        ],
+      };
+
+      var fourth_qudrant = {
+        score: parseFloat(report.ps) + parseFloat(report.ar),
+        path: [
+          { x: ps.x, y: ps.y },
+          { x: ar.x, y: ar.y },
+          { x: center_x, y: center_y },
+          { x: ps.x, y: ps.y },
+        ],
+      };
+
+      var quadrant_scores = [
+        first_qudrant.score,
+        second_qudrant.score,
+        third_qudrant.score,
+        fourth_qudrant.score,
+      ];
+      var quadrants = [
+        first_qudrant,
+        second_qudrant,
+        third_qudrant,
+        fourth_qudrant,
+      ];
+      var max = Math.max.apply(null, quadrant_scores);
+      var max_quadrants = [];
+
+      quadrant_scores.forEach(function (score, index) {
+        if (max === score) {
+          max_quadrants.push(quadrants[index]);
+        }
+      });
+
+      console.log(max_quadrants);
+
+      max_quadrants.forEach(function (max_quadrant) {
+        svgContainer
+          .append("path")
+          .attr("d", d3line2(max_quadrant.path))
+          .style("stroke-width", 2)
+          .style("stroke", "none")
+          .style("fill", "#ff5900");
+      });
+      svgContainer
+        .append("text")
+        .attr("x", 102)
+        .attr("y", 387)
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "10px")
+        .attr("fill", "black")
+        .attr("font-weight", "200")
+        .attr("transform", "rotate(-90, 95, 240)")
+        .attr("textLength", "85")
+        .text("APPROVAL AXIS");
+      svgContainer
+        .append("text")
+        .attr("x", "135")
+        .attr("y", "240")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "10px")
+        .attr("font-weight", "200")
+        .attr("fill", "black")
+        .attr("textLength", "85")
+        .text("CONTROL AXIS");
+
+      svgContainer
+        .append("text")
+        .attr("x", "199")
+        .attr("y", "79")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "15px")
+        .attr("font-weight", "400")
+        .attr("fill", "black")
+        .attr("textLength", "130")
+        .text("SEEK APPROVAL");
+      svgContainer
+        .append("text")
+        .attr("x", "187")
+        .attr("y", "430")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "15px")
+        .attr("font-weight", "400")
+        .attr("fill", "black")
+        .attr("textLength", "160")
+        .text("AVOID DISAPPROVAL");
+
+      svgContainer
+        .append("text")
+        .attr("x", "25")
+        .attr("y", "244")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "15px")
+        .attr("fill", "black")
+        .attr("font-weight", "400")
+        .attr("textLength", "55")
+        .text("UNDER");
+      svgContainer
+        .append("text")
+        .attr("x", "15")
+        .attr("y", "264")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "15px")
+        .attr("font-weight", "400")
+        .attr("fill", "black")
+        .attr("textLength", "75")
+        .text("CONTROL");
+
+      svgContainer
+        .append("text")
+        .attr("x", "426")
+        .attr("y", "249")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "15px")
+        .attr("font-weight", "400")
+        .attr("fill", "black")
+        .attr("textLength", "45")
+        .text("OVER");
+      svgContainer
+        .append("text")
+        .attr("x", "416")
+        .attr("y", "268")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "15px")
+        .attr("font-weight", "400")
+        .attr("fill", "black")
+        .attr("textLength", "75")
+        .text("CONTROL");
+
+      svgContainer
+        .append("text")
+        .attr("x", "300")
+        .attr("y", "185")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "10px")
+        .attr("font-weight", "400")
+        .attr("textLength", "35")
+        .attr("fill", "black")
+        .text("FIGHT");
+
+      svgContainer
+        .append("text")
+        .attr("x", "157")
+        .attr("y", "320")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "10px")
+        .attr("fill", "black")
+        .attr("font-weight", "400")
+        .attr("textLength", "40")
+        .text("FLIGHT");
+    </script>
+  </body>
+</html>
