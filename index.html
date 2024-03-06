@@ -6,7 +6,8 @@
     <title>D3.js Dynamic Graph</title>
     <style>
       #chart {
-        text-align: center;
+        display: flex;
+        justify-content: center;
         transition: transform 0.3s ease; /* Add transition for smooth animation */
       }
     </style>
@@ -32,34 +33,16 @@
         .attr("height", 500)
         .attr(
           "style",
-          "background-color: #f6f6f6;background-repeat: no-repeat;background-position: 50%;"
+          "background-color: white;background-repeat: no-repeat;background-position: 50%;"
         )
         .attr("id", "stress_shifter_svg");
-
-      var line1 = svgContainer
-        .append("line")
-        .attr("x1", 100)
-        .attr("y1", 250)
-        .attr("x2", 400)
-        .attr("y2", 250)
-        .attr("stroke-width", 4)
-        .attr("stroke", "white");
-
-      var line2 = svgContainer
-        .append("line")
-        .attr("x1", 250)
-        .attr("y1", 400)
-        .attr("x2", 250)
-        .attr("y2", 100)
-        .attr("stroke-width", 4)
-        .attr("stroke", "white");
 
       var circle2 = svgContainer
         .append("circle")
         .attr("cx", 250)
         .attr("cy", 250)
         .attr("r", 150)
-        .style("stroke", "white") // set the line colour
+        .style("stroke", "grey") // set the line colour
         .style("stroke-width", "3px")
         .style("fill", "none");
 
@@ -68,7 +51,7 @@
         .attr("cx", 250)
         .attr("cy", 250)
         .attr("r", 120)
-        .style("stroke", "white") // set the line colour
+        .style("stroke", "grey") // set the line colour
         .style("stroke-width", "3px")
         .style("fill", "none");
 
@@ -239,14 +222,14 @@
 
       svgContainer
         .append("text")
-        .attr("x", "25")
+        .attr("x", "13")
         .attr("y", "244")
         .attr("font-family", "sans-serif")
         .attr("font-size", "15px")
         .attr("fill", "black")
         .attr("font-weight", "400")
-        .attr("textLength", "55")
-        .text("UNDER");
+        .attr("textLength", "80")
+        .text("AVOIDING");
       svgContainer
         .append("text")
         .attr("x", "15")
@@ -260,14 +243,14 @@
 
       svgContainer
         .append("text")
-        .attr("x", "426")
+        .attr("x", "416")
         .attr("y", "249")
         .attr("font-family", "sans-serif")
         .attr("font-size", "15px")
         .attr("font-weight", "400")
         .attr("fill", "black")
-        .attr("textLength", "45")
-        .text("OVER");
+        .attr("textLength", "65")
+        .text("SEEKING");
       svgContainer
         .append("text")
         .attr("x", "416")
@@ -300,6 +283,24 @@
         .attr("font-weight", "400")
         .attr("textLength", "40")
         .text("FLIGHT");
+
+      var line1 = svgContainer
+        .append("line")
+        .attr("x1", 100)
+        .attr("y1", 250)
+        .attr("x2", 400)
+        .attr("y2", 250)
+        .attr("stroke-width", 4)
+        .attr("stroke", "grey");
+
+      var line2 = svgContainer
+        .append("line")
+        .attr("x1", 250)
+        .attr("y1", 400)
+        .attr("x2", 250)
+        .attr("y2", 100)
+        .attr("stroke-width", 4)
+        .attr("stroke", "grey");
     </script>
   </body>
 </html>
