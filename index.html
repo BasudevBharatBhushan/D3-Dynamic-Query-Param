@@ -16,16 +16,7 @@
   <body>
     <div id="chart" id="chart"></div>
     <script>
-      var queryParams = new URLSearchParams(window.location.search);
-      var ar = queryParams.get("ar") || "2.67";
-      var br = queryParams.get("br") || "3.33";
-      var lg = queryParams.get("lg") || "4.33";
-      var ps = queryParams.get("ps") || "3.67";
-      var scale = queryParams.get("scale") || "1.25";
-      var chartElement = document.getElementById("chart");
-      chartElement.style.transform = "scale(" + scale + ")";
-      var report = { ar: ar, br: br, lg: lg, ps: ps };
-
+      report = { ar: "2.67", br: "3.33", lg: "4.65", ps: "3.67" };
       var svgContainer = d3
         .select("#chart")
         .append("svg")
@@ -36,24 +27,6 @@
           "background-color: white;background-repeat: no-repeat;background-position: 50%;"
         )
         .attr("id", "stress_shifter_svg");
-
-      var circle2 = svgContainer
-        .append("circle")
-        .attr("cx", 250)
-        .attr("cy", 250)
-        .attr("r", 150)
-        .style("stroke", "grey") // set the line colour
-        .style("stroke-width", "3px")
-        .style("fill", "none");
-
-      var circle3 = svgContainer
-        .append("circle")
-        .attr("cx", 250)
-        .attr("cy", 250)
-        .attr("r", 120)
-        .style("stroke", "grey") // set the line colour
-        .style("stroke-width", "3px")
-        .style("fill", "none");
 
       var center_x = 250;
       var center_y = 250;
@@ -264,24 +237,24 @@
 
       svgContainer
         .append("text")
-        .attr("x", "300")
-        .attr("y", "185")
+        .attr("x", "360")
+        .attr("y", "135")
         .attr("font-family", "sans-serif")
-        .attr("font-size", "10px")
+        .attr("font-size", "15px")
         .attr("font-weight", "400")
-        .attr("textLength", "35")
+        .attr("textLength", "45")
         .attr("fill", "black")
         .text("FIGHT");
 
       svgContainer
         .append("text")
-        .attr("x", "157")
-        .attr("y", "320")
+        .attr("x", "90")
+        .attr("y", "370")
         .attr("font-family", "sans-serif")
-        .attr("font-size", "10px")
+        .attr("font-size", "15px")
         .attr("fill", "black")
         .attr("font-weight", "400")
-        .attr("textLength", "40")
+        .attr("textLength", "50")
         .text("FLIGHT");
 
       var line1 = svgContainer
@@ -301,6 +274,24 @@
         .attr("y2", 100)
         .attr("stroke-width", 4)
         .attr("stroke", "grey");
+
+      var circle2 = svgContainer
+        .append("circle")
+        .attr("cx", 250)
+        .attr("cy", 250)
+        .attr("r", 150)
+        .style("stroke", "grey") // set the line colour
+        .style("stroke-width", "3px")
+        .style("fill", "none");
+
+      var circle3 = svgContainer
+        .append("circle")
+        .attr("cx", 250)
+        .attr("cy", 250)
+        .attr("r", 75)
+        .style("stroke", "grey") // set the line colour
+        .style("stroke-width", "3px")
+        .style("fill", "none");
     </script>
   </body>
 </html>
